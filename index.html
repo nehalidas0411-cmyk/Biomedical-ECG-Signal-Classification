@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ECG ANN Classifier — SRM Institute</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>🫀</text></svg>"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-logo">ECG<span>.</span>ANN <span>// SRM IST</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features-section">Features</a></li>
+    <li><a href="#nn-section">Network</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#classifier">Live Demo</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn">☰</button>
+</nav>
+
+<!-- ═══════════════════════════ HERO ══════════════════════════ -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Artificial Neural Networks &amp; Pattern Recognition
+  </div>
+
+  <h1>
+    Classifying <span class="accent">Cardiac Signals</span><br/>
+    <span class="dim">with Neural Networks</span>
+  </h1>
+
+  <p class="hero-sub">
+    A deep dive into biomedical ECG classification using the MIT-BIH
+    arrhythmia dataset — featuring feature extraction, ANN training,
+    and real-time inference.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="#classifier" class="btn btn-primary">▶ Try Live Classifier</a>
+    <a href="#about"      class="btn btn-outline">Learn How It Works</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-value" data-target="80.26">0</span><span class="stat-label">% Accuracy</span></div>
+    <div class="stat"><span class="stat-value" data-target="109446">0</span><span class="stat-label">ECG Samples</span></div>
+    <div class="stat"><span class="stat-value" data-target="8">0</span><span class="stat-label">Features</span></div>
+    <div class="stat"><span class="stat-value" data-target="5">0</span><span class="stat-label">ECG Classes</span></div>
+  </div>
+
+  <svg class="hero-ecg" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline fill="none" stroke="#00f5a0" stroke-width="2"
+      points="0,60 100,60 120,60 140,20 150,90 160,60 180,60 250,60
+              270,60 290,60 310,20 320,90 330,60 350,60 420,60
+              440,60 460,60 480,20 490,90 500,60 520,60 590,60
+              610,60 630,60 650,20 660,90 670,60 690,60 760,60
+              780,60 800,60 820,20 830,90 840,60 860,60 930,60
+              950,60 970,60 990,20 1000,90 1010,60 1030,60 1200,60"/>
+  </svg>
+</section>
+
+<!-- ═══════════════════════════ ABOUT ═════════════════════════ -->
+<section id="about" class="fade-in">
+  <span class="section-tag">// 01 — about the project</span>
+  <h2 class="section-title">What is ECG<br/>Signal Classification?</h2>
+  <p class="section-desc">
+    The heart generates electrical signals with each beat. An ECG records these signals —
+    and subtle deviations in waveform patterns reveal life-threatening arrhythmias.
+    We train an ANN to detect these patterns automatically.
+  </p>
+
+  <div class="about-grid">
+    <div>
+      <div class="about-card" style="margin-bottom:1rem">
+        <div class="about-card-icon">🫀</div>
+        <h3>The Problem</h3>
+        <p>Cardiac arrhythmias affect millions globally. Manual ECG interpretation
+        is time-consuming and prone to error. Automated classification using
+        machine learning enables faster, more consistent diagnosis.</p>
+      </div>
+      <div class="about-card" style="margin-bottom:1rem">
+        <div class="about-card-icon">📊</div>
+        <h3>The Dataset</h3>
+        <p>MIT-BIH Arrhythmia Database — the gold standard ECG benchmark.
+        87,554 training samples and 21,892 test samples. Each signal is
+        187 time-steps, sampled at 125 Hz. 5 arrhythmia classes.</p>
+        <p style="margin-top:0.6rem;font-size:0.8rem;color:var(--text3)">
+          Moody GB, Mark RG. <em>The impact of the MIT-BIH Arrhythmia Database.</em>
+          IEEE Eng in Med and Biol 20(3):45-50 (May-June 2001).
+        </p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🧠</div>
+        <h3>The Solution</h3>
+        <p>A Multi-Layer Perceptron (MLP) trained on 8 time-domain features
+        extracted per signal. Architecture: <code style="color:var(--green);font-family:var(--mono)">8→64→32→16→5</code> with
+        ReLU activations, Adam optimizer, and early stopping.</p>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:1.2rem;font-size:1rem;color:var(--text2);font-family:var(--mono)">// PROJECT PIPELINE</h3>
+      <div class="pipeline">
+        <div class="pipeline-step"><span class="step-num">01</span><span class="step-text"><strong>Data Loading</strong> — MIT-BIH CSV (87,554 training samples)</span></div>
+        <div class="pipeline-step"><span class="step-num">02</span><span class="step-text"><strong>Visualisation</strong> — Plot raw waveforms per class</span></div>
+        <div class="pipeline-step"><span class="step-num">03</span><span class="step-text"><strong>Feature Extraction</strong> — 8 time-domain statistics per signal</span></div>
+        <div class="pipeline-step"><span class="step-num">04</span><span class="step-text"><strong>Class Balancing</strong> — Oversample minorities to 50% of majority</span></div>
+        <div class="pipeline-step"><span class="step-num">05</span><span class="step-text"><strong>Normalisation</strong> — StandardScaler (zero mean, unit variance)</span></div>
+        <div class="pipeline-step"><span class="step-num">06</span><span class="step-text"><strong>ANN Training</strong> — MLP, Adam, early stopping (173 iterations)</span></div>
+        <div class="pipeline-step"><span class="step-num">07</span><span class="step-text"><strong>Evaluation</strong> — Accuracy 80.26%, F1, ROC-AUC, confusion matrix</span></div>
+        <div class="pipeline-step"><span class="step-num">08</span><span class="step-text"><strong>Interpretation</strong> — Feature importance via layer-1 weights</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ECG WAVEFORM VISUALISER ════════════════ -->
+<section style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 02 — ecg waveform explorer</span>
+  <h2 class="section-title">What Do ECG Signals<br/>Actually Look Like?</h2>
+  <p class="section-desc">
+    Each row below shows a simulated ECG waveform for each class. Notice how
+    Normal beats have a clean, consistent P-QRS-T pattern, while arrhythmias
+    distort this shape in characteristic ways.
+  </p>
+
+  <div style="margin-top:2.5rem">
+    <!-- Class tabs -->
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem" id="waveTabs">
+      <button class="wave-tab active" data-class="0" style="--c:#00C896">💚 Normal</button>
+      <button class="wave-tab" data-class="1" style="--c:#FF4B6E">⚡ Supraventricular</button>
+      <button class="wave-tab" data-class="2" style="--c:#FFD93D">⚠️ Ventricular</button>
+      <button class="wave-tab" data-class="3" style="--c:#7c6bff">🔀 Fusion</button>
+      <button class="wave-tab" data-class="4" style="--c:#74B9FF">❓ Unknown</button>
+    </div>
+
+    <div class="chart-panel" style="padding:1.5rem 1.5rem 2rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <h4 id="waveTitle" style="color:var(--green)">Normal Sinus Rhythm</h4>
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text3)">187 time steps @ 125 Hz</span>
+      </div>
+      <canvas id="waveCanvas" style="width:100%;height:160px;display:block"></canvas>
+      <div style="display:flex;justify-content:space-between;margin-top:0.8rem;font-size:0.75rem;color:var(--text3);font-family:var(--mono)">
+        <span>t = 0 ms</span>
+        <span id="waveDesc" style="color:var(--text2);text-align:center;max-width:60%">Regular P-QRS-T pattern. Consistent intervals and normal amplitude.</span>
+        <span>t = 1496 ms</span>
+      </div>
+    </div>
+
+    <!-- Waveform comparison strip -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.8rem;margin-top:1rem">
+      <div class="mini-wave-card" data-class="0">
+        <canvas class="mini-wave" data-class="0"></canvas>
+        <span style="color:#00C896;font-size:0.7rem;font-family:var(--mono)">Normal</span>
+      </div>
+      <div class="mini-wave-card" data-class="1">
+        <canvas class="mini-wave" data-class="1"></canvas>
+        <span style="color:#FF4B6E;font-size:0.7rem;font-family:var(--mono)">Supra</span>
+      </div>
+      <div class="mini-wave-card" data-class="2">
+        <canvas class="mini-wave" data-class="2"></canvas>
+        <span style="color:#FFD93D;font-size:0.7rem;font-family:var(--mono)">Ventri</span>
+      </div>
+      <div class="mini-wave-card" data-class="3">
+        <canvas class="mini-wave" data-class="3"></canvas>
+        <span style="color:#7c6bff;font-size:0.7rem;font-family:var(--mono)">Fusion</span>
+      </div>
+      <div class="mini-wave-card" data-class="4">
+        <canvas class="mini-wave" data-class="4"></canvas>
+        <span style="color:#74B9FF;font-size:0.7rem;font-family:var(--mono)">Unknown</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ ECG CLASSES ══════════════════════ -->
+<section style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 03 — ecg classes</span>
+  <h2 class="section-title">The 5 ECG Classes</h2>
+  <p class="section-desc">MIT-BIH labels each heartbeat into one of five AAMI categories.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem;margin-top:2.5rem">
+    <div class="about-card" style="border-top:3px solid #00C896">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">💚</div>
+      <h3 style="color:#00C896">Normal (N)</h3>
+      <p>Regular sinus rhythm. Clear P-QRS-T pattern. Consistent RR intervals, normal amplitude. Comprises ~72% of the dataset.</p>
+    </div>
+    <div class="about-card" style="border-top:3px solid #FF4B6E">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">⚡</div>
+      <h3 style="color:#FF4B6E">Supraventricular (S)</h3>
+      <p>Premature beats above ventricles. Irregular P-waves, narrow QRS. ~2.5% of dataset — a minority class.</p>
+    </div>
+    <div class="about-card" style="border-top:3px solid #FFD93D">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">⚠️</div>
+      <h3 style="color:#FFD93D">Ventricular (V)</h3>
+      <p>Beats from ventricles. Wide, bizarre QRS morphology. Can indicate serious heart disease. ~6.6% of dataset.</p>
+    </div>
+    <div class="about-card" style="border-top:3px solid #7c6bff">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">🔀</div>
+      <h3 style="color:#7c6bff">Fusion (F)</h3>
+      <p>Normal + ventricular beat merged. Intermediate QRS. Rarest class at ~0.7% — most affected by imbalance.</p>
+    </div>
+    <div class="about-card" style="border-top:3px solid #74B9FF">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">❓</div>
+      <h3 style="color:#74B9FF">Unknown (Q)</h3>
+      <p>Paced beats or unclassifiable morphology. Does not fit standard patterns. ~4.6% of dataset.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CLASS IMBALANCE ═══════════════════════ -->
+<section style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 04 — class imbalance</span>
+  <h2 class="section-title">Handling Class Imbalance</h2>
+  <p class="section-desc">
+    The MIT-BIH dataset is heavily skewed — 72% of samples are Normal.
+    Without correction, the model would simply predict "Normal" for everything
+    and still appear 72% accurate. We fix this with oversampling.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem" class="responsive-2col">
+
+    <!-- Before -->
+    <div class="chart-panel">
+      <h4 style="color:var(--red);margin-bottom:1.5rem">❌ BEFORE — Raw Distribution</h4>
+      <div id="beforeBars"></div>
+      <p style="margin-top:1.2rem;font-size:0.8rem;color:var(--text3);font-style:italic">
+        A model trained on this would predict "Normal" almost always and still get ~72% accuracy — misleading!
+      </p>
+    </div>
+
+    <!-- After -->
+    <div class="chart-panel">
+      <h4 style="color:var(--green);margin-bottom:1.5rem">✅ AFTER — Oversampled</h4>
+      <div id="afterBars"></div>
+      <p style="margin-top:1.2rem;font-size:0.8rem;color:var(--text3);font-style:italic">
+        Minority classes are oversampled to 50% of majority size using <code style="color:var(--cyan)">sklearn.utils.resample</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Why it matters box -->
+  <div style="margin-top:1.5rem;background:rgba(0,245,160,0.05);border:1px solid rgba(0,245,160,0.2);border-radius:var(--radius);padding:1.5rem">
+    <div style="font-family:var(--mono);font-size:0.75rem;color:var(--green);margin-bottom:0.6rem">// WHY THIS MATTERS</div>
+    <p style="color:var(--text2);font-size:0.9rem;line-height:1.8">
+      In medical classification, a false negative (missing a Ventricular arrhythmia) is far more dangerous
+      than a false positive. Oversampling forces the model to learn the patterns of rare but critical classes,
+      improving recall on classes like Fusion and Supraventricular — at the cost of slightly lower overall accuracy.
+      This is the correct trade-off in biomedical applications.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FEATURES ════════════════════════ -->
+<section id="features-section" style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 05 — feature extraction</span>
+  <h2 class="section-title">8 Time-Domain Features</h2>
+  <p class="section-desc">
+    Instead of feeding raw 187-point signals into the ANN, we compute
+    compact statistical descriptors — reducing dimensionality from 187 to 8
+    while preserving the most discriminative information.
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feat-formula">μ = (1/N)Σx[n]</span>
+      <div class="feat-name">Mean</div>
+      <div class="feat-desc">Average amplitude. Reflects the DC offset / baseline of the signal.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">σ² = E[(x−μ)²]</span>
+      <div class="feat-name">Variance</div>
+      <div class="feat-desc">Spread of signal values. High variance → more erratic waveform.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">√(1/N · Σx²)</span>
+      <div class="feat-name">RMS</div>
+      <div class="feat-desc">Root Mean Square — total signal energy or power content.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">σ = √variance</span>
+      <div class="feat-name">Std Deviation</div>
+      <div class="feat-desc">Typical deviation from mean. Ventricular beats show much higher std.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">max(x) − min(x)</span>
+      <div class="feat-name">Peak-to-Peak</div>
+      <div class="feat-desc">Total amplitude range. #1 most important feature in our model.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">E[((x−μ)/σ)³]</span>
+      <div class="feat-name">Skewness</div>
+      <div class="feat-desc">Waveform asymmetry. Inverted T-waves (abnormal) produce negative skew.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">E[((x−μ)/σ)⁴]</span>
+      <div class="feat-name">Kurtosis</div>
+      <div class="feat-desc">Peakedness. Sharp ectopic beats = high kurtosis vs smooth normal beats.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feat-formula">Σ|sign(xₙ)≠sign(xₙ₊₁)|</span>
+      <div class="feat-name">Zero Crossings</div>
+      <div class="feat-desc">How often signal crosses zero — indicates oscillation complexity.</div>
+    </div>
+  </div>
+
+  <!-- Normalisation explainer -->
+  <div style="margin-top:2rem;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);border-radius:var(--radius);padding:1.5rem">
+    <div style="font-family:var(--mono);font-size:0.75rem;color:var(--cyan);margin-bottom:0.8rem">// WHY WE NORMALISE (StandardScaler)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem" class="responsive-2col">
+      <div>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.8;margin-bottom:0.8rem">
+          Our 8 features live on very different scales — Peak-to-Peak can be ~0.82
+          while Zero Crossings can be ~18. Without normalisation, large-valued features
+          dominate gradient updates, causing the ANN to ignore small-valued features entirely.
+        </p>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.8">
+          <strong style="color:var(--cyan)">StandardScaler</strong> transforms each feature to zero mean and
+          unit variance: <code style="color:var(--green);font-family:var(--mono)">x' = (x − μ) / σ</code>.
+          This puts all 8 features on equal footing, leading to faster convergence and a fairer model.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;justify-content:center">
+        <div style="background:var(--bg3);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.8rem">
+          <div style="color:var(--text3);margin-bottom:0.5rem">Before scaling:</div>
+          <div style="color:var(--red)">Mean:           0.012</div>
+          <div style="color:var(--red)">Zero Crossings: 18.5 &nbsp;← 1500× bigger!</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.8rem">
+          <div style="color:var(--text3);margin-bottom:0.5rem">After scaling:</div>
+          <div style="color:var(--green)">Mean:           0.00</div>
+          <div style="color:var(--green)">Zero Crossings: 0.00 ← equal footing ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ WHY MLP ════════════════════════════════ -->
+<section style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 06 — model choice</span>
+  <h2 class="section-title">Why MLP and Not<br/>CNN or LSTM?</h2>
+  <p class="section-desc">A common question — here's the reasoning behind our architecture choice.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem;margin-top:2.5rem">
+    <div class="about-card" style="border-left:3px solid var(--green)">
+      <div style="font-family:var(--mono);font-size:0.75rem;color:var(--green);margin-bottom:0.8rem">✅ MLP — OUR CHOICE</div>
+      <h3 style="margin-bottom:0.6rem">Multi-Layer Perceptron</h3>
+      <p style="margin-bottom:0.8rem">We extract 8 compact statistical features first.
+      Once a signal is compressed into a feature vector, <strong>temporal order no longer matters</strong>
+      — the features are just numbers. MLP is the correct and efficient choice for this.</p>
+      <ul style="color:var(--text2);font-size:0.85rem;line-height:2;padding-left:1.2rem">
+        <li>Fast to train (173 iterations)</li>
+        <li>Interpretable (feature importance)</li>
+        <li>Low compute cost</li>
+        <li>Excellent for feature vectors</li>
+      </ul>
+    </div>
+    <div class="about-card" style="border-left:3px solid var(--text3);opacity:0.75">
+      <div style="font-family:var(--mono);font-size:0.75rem;color:var(--text3);margin-bottom:0.8rem">⚠️ CNN — NOT USED</div>
+      <h3 style="margin-bottom:0.6rem">Convolutional Neural Network</h3>
+      <p>CNNs are ideal when you feed <strong>raw signals</strong> directly and want
+      the model to learn its own filters. Since we do manual feature extraction,
+      a CNN would add complexity without benefit at our scale.</p>
+      <p style="margin-top:0.6rem;color:var(--text3);font-size:0.82rem">
+        Would be appropriate for raw 187-point input without feature engineering.
+      </p>
+    </div>
+    <div class="about-card" style="border-left:3px solid var(--text3);opacity:0.75">
+      <div style="font-family:var(--mono);font-size:0.75rem;color:var(--text3);margin-bottom:0.8rem">⚠️ LSTM — NOT USED</div>
+      <h3 style="margin-bottom:0.6rem">Recurrent Neural Network</h3>
+      <p>LSTMs model <strong>sequential dependencies</strong> across time steps.
+      Useful for continuous multi-beat ECG streams. For single-beat classification
+      with extracted features, LSTM overhead is unnecessary.</p>
+      <p style="margin-top:0.6rem;color:var(--text3);font-size:0.82rem">
+        Would be appropriate for multi-beat temporal pattern detection.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ NEURAL NETWORK ANIMATION ═════════════ -->
+<section id="nn-section" class="section-full fade-in" style="border-top:1px solid var(--border)">
+  <div>
+    <span class="section-tag">// 07 — ann architecture</span>
+    <h2 class="section-title">Neural Network Architecture</h2>
+    <p class="section-desc">
+      Live animation of our MLP — 8 input features flow through three hidden
+      layers with ReLU activations. The output layer gives probabilities for all 5 ECG classes.
+    </p>
+
+    <div class="nn-container">
+      <canvas id="nn-canvas"></canvas>
+      <div class="nn-legend">
+        <div class="nn-legend-item"><span class="legend-dot" style="background:#00f5a0"></span>Input (8 features)</div>
+        <div class="nn-legend-item"><span class="legend-dot" style="background:#00d4ff"></span>Hidden 1 — 64 neurons (ReLU)</div>
+        <div class="nn-legend-item"><span class="legend-dot" style="background:#7c6bff"></span>Hidden 2 — 32 neurons (ReLU)</div>
+        <div class="nn-legend-item"><span class="legend-dot" style="background:#ff6b9d"></span>Hidden 3 — 16 neurons (ReLU)</div>
+        <div class="nn-legend-item"><span class="legend-dot" style="background:#ffd93d"></span>Output — 5 classes (Softmax)</div>
+      </div>
+    </div>
+
+    <!-- Architecture detail -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1.5rem">
+      <div class="about-card" style="text-align:center">
+        <div style="font-family:var(--mono);font-size:1.5rem;color:var(--green);font-weight:700">Adam</div>
+        <div style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Optimiser</div>
+        <div style="color:var(--text3);font-size:0.78rem">Adaptive learning rate</div>
+      </div>
+      <div class="about-card" style="text-align:center">
+        <div style="font-family:var(--mono);font-size:1.5rem;color:var(--cyan);font-weight:700">ReLU</div>
+        <div style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Activation</div>
+        <div style="color:var(--text3);font-size:0.78rem">max(0, x) — no vanishing gradients</div>
+      </div>
+      <div class="about-card" style="text-align:center">
+        <div style="font-family:var(--mono);font-size:1.5rem;color:var(--purple);font-weight:700">Log-Loss</div>
+        <div style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Loss Function</div>
+        <div style="color:var(--text3);font-size:0.78rem">Cross-entropy for multi-class</div>
+      </div>
+      <div class="about-card" style="text-align:center">
+        <div style="font-family:var(--mono);font-size:1.5rem;color:var(--yellow);font-weight:700">173</div>
+        <div style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Iterations</div>
+        <div style="color:var(--text3);font-size:0.78rem">Early stopping, patience=20</div>
+      </div>
+      <div class="about-card" style="text-align:center">
+        <div style="font-family:var(--mono);font-size:1.5rem;color:#ff6b9d;font-weight:700">Softmax</div>
+        <div style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Output Layer</div>
+        <div style="color:var(--text3);font-size:0.78rem">Probabilities sum to 1.0</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ RESULTS ══════════════════════════ -->
+<section id="results" class="fade-in">
+  <span class="section-tag">// 08 — results</span>
+  <h2 class="section-title">Model Performance</h2>
+  <p class="section-desc">
+    Evaluated on the MIT-BIH test set (21,892 samples).
+    80.26% overall accuracy — with strong performance on high-risk classes
+    (Ventricular F1: 0.93, Normal F1: 1.00).
+  </p>
+
+  <div class="results-hero">
+</div>
+    <div class="result-metric"><span class="val green">80.26%</span><span class="lbl">Test Accuracy</span></div>
+    <div class="result-metric"><span class="val cyan">0.997</span><span class="lbl">AUC-ROC Normal</span></div>
+    <div class="result-metric"><span class="val" style="color:var(--yellow)">173</span><span class="lbl">Iterations</span></div>
+    <div class="result-metric"><span class="val" style="color:var(--purple)">0.93</span><span class="lbl">Ventricular F1</span></div>
+    <div class="result-metric"><span class="val" style="color:#ff6b9d">1.00</span><span class="lbl">Normal F1</span></div>
+    <div class="result-metric"><span class="val" style="color:var(--green)">87K+</span><span class="lbl">Training Samples</span></div>
+  </div>
+
+    <!-- Output Images Gallery -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:2rem 0">
+  <div class="chart-panel">
+    <h4>SAMPLE ECG SIGNALS</h4>
+    <img src="images/fig1_sample_signals.png" style="width:100%;border-radius:8px"/>
+  </div>
+  <div class="chart-panel">
+    <h4>FEATURE DISTRIBUTIONS</h4>
+    <img src="images/fig2_feature_distributions.png" style="width:100%;border-radius:8px"/>
+  </div>
+  <div class="chart-panel">
+    <h4>CONFUSION MATRIX</h4>
+    <img src="images/fig3_confusion_matrix.png" style="width:100%;border-radius:8px"/>
+  </div>
+  <div class="chart-panel">
+    <h4>LEARNING CURVE</h4>
+    <img src="images/fig4_learning_curve.png" style="width:100%;border-radius:8px"/>
+  </div>
+  <div class="chart-panel">
+    <h4>ROC CURVE</h4>
+    <img src="images/fig5_roc_curve.png" style="width:100%;border-radius:8px"/>
+  </div>
+  <div class="chart-panel">
+    <h4>FEATURE IMPORTANCE</h4>
+    <img src="images/fig6_feature_importance.png" style="width:100%;border-radius:8px"/>
+  </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-panel">
+      <h4>ROC-AUC PER CLASS</h4>
+      <div class="roc-bars" id="rocBars"></div>
+    </div>
+    <div class="chart-panel">
+      <h4>FEATURE IMPORTANCE (LAYER-1 WEIGHTS)</h4>
+      <div class="fi-bars" id="fiBars"></div>
+    </div>
+    <div class="chart-panel">
+      <h4>CLASSIFICATION REPORT</h4>
+      <div id="classReport"></div>
+    </div>
+    <div class="chart-panel">
+      <h4>KEY OBSERVATIONS</h4>
+      <div style="display:flex;flex-direction:column;gap:0.8rem;font-size:0.85rem">
+        <div style="padding:0.8rem;background:rgba(0,200,150,0.08);border-radius:8px;border-left:3px solid #00C896">
+          <strong style="color:#00C896">Normal class:</strong>
+          <span style="color:var(--text2)"> Near-perfect F1 (1.00) — dominant class, well-represented.</span>
+        </div>
+        <div style="padding:0.8rem;background:rgba(255,217,61,0.08);border-radius:8px;border-left:3px solid #FFD93D">
+          <strong style="color:#FFD93D">Ventricular:</strong>
+          <span style="color:var(--text2)"> Strong F1 (0.93) despite being minority — oversampling worked.</span>
+        </div>
+        <div style="padding:0.8rem;background:rgba(255,75,110,0.08);border-radius:8px;border-left:3px solid #FF4B6E">
+          <strong style="color:#FF4B6E">Supraventricular:</strong>
+          <span style="color:var(--text2)"> Lower recall (0.80) — visually similar to Normal signals.</span>
+        </div>
+        <div style="padding:0.8rem;background:rgba(124,107,255,0.08);border-radius:8px;border-left:3px solid #7c6bff">
+          <strong style="color:#7c6bff">Fusion:</strong>
+          <span style="color:var(--text2)"> Hardest class — mixed morphology confuses the model.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LIVE CLASSIFIER ══════════════════════ -->
+<section id="classifier" style="border-top:1px solid var(--border)" class="fade-in">
+  <span class="section-tag">// 09 — live demo</span>
+  <h2 class="section-title">Live ECG Classifier</h2>
+  <p class="section-desc">
+    Adjust the feature sliders below — or click a preset to load a typical signal profile.
+    The ANN classifies your input in real time.
+  </p>
+
+  <div class="classifier-layout">
+    <div class="classifier-inputs">
+      <h3>// INPUT FEATURES</h3>
+
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Mean Amplitude</span><span class="slider-value" id="val-mean">0.012</span></div>
+        <input type="range" id="sl-mean" min="-0.5" max="0.5" step="0.001" value="0.012"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Variance</span><span class="slider-value" id="val-var">0.018</span></div>
+        <input type="range" id="sl-var" min="0" max="0.3" step="0.001" value="0.018"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">RMS</span><span class="slider-value" id="val-rms">0.210</span></div>
+        <input type="range" id="sl-rms" min="0" max="1.5" step="0.001" value="0.210"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Std Deviation</span><span class="slider-value" id="val-std">0.130</span></div>
+        <input type="range" id="sl-std" min="0" max="0.8" step="0.001" value="0.130"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Peak-to-Peak</span><span class="slider-value" id="val-ptp">0.820</span></div>
+        <input type="range" id="sl-ptp" min="0" max="3.0" step="0.01" value="0.820"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Skewness</span><span class="slider-value" id="val-skew">-0.040</span></div>
+        <input type="range" id="sl-skew" min="-5" max="5" step="0.01" value="-0.040"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Kurtosis</span><span class="slider-value" id="val-kurt">2.100</span></div>
+        <input type="range" id="sl-kurt" min="-2" max="30" step="0.1" value="2.100"/>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span class="slider-label">Zero Crossings</span><span class="slider-value" id="val-zc">18</span></div>
+        <input type="range" id="sl-zc" min="0" max="80" step="1" value="18"/>
+      </div>
+
+      <div class="preset-buttons">
+        <button class="preset-btn" onclick="loadPreset('normal')">💚 Normal</button>
+        <button class="preset-btn" onclick="loadPreset('supra')">⚡ Supraventricular</button>
+        <button class="preset-btn" onclick="loadPreset('ventri')">⚠️ Ventricular</button>
+        <button class="preset-btn" onclick="loadPreset('fusion')">🔀 Fusion</button>
+      </div>
+    </div>
+
+    <div class="classifier-output">
+      <div class="output-main" id="outputMain">
+        <div class="output-label">PREDICTED CLASS</div>
+        <div class="output-class" id="outputClass">—</div>
+        <div class="output-confidence" id="outputConf"></div>
+      </div>
+      <div class="output-probs">
+        <h4>PROBABILITY DISTRIBUTION</h4>
+        <div id="probBars"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ TEAM ═════════════════════════════ -->
+<section id="team" class="fade-in">
+  <span class="section-tag">// 10 — the team</span>
+  <h2 class="section-title">Meet the Team</h2>
+  <p class="section-desc" style="margin:0 auto">SRM Institute of Science and Technology</p>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(0,245,160,0.1);border-color:var(--green)">👩‍💻</div>
+      <div class="team-name">Rohini C</div>
+      <div class="team-roll">RA2411060010005</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(0,212,255,0.1);border-color:var(--cyan)">👨‍💻</div>
+      <div class="team-name">Ram Karthikeyan</div>
+      <div class="team-roll">RA2411060010006</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(124,107,255,0.1);border-color:var(--purple)">👩‍💻</div>
+      <div class="team-name">Nehali Das</div>
+      <div class="team-roll">RA2411060010007</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:rgba(255,107,157,0.1);border-color:#ff6b9d">👨‍💻</div>
+      <div class="team-name">Dharshan S</div>
+      <div class="team-roll">RA2411060010008</div>
+    </div>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-label">// Project Guide</div>
+    <div class="guide-name">Dr. Varshini Karthik</div>
+    <div class="guide-inst">SRM Institute of Science and Technology</div>
+    <div class="guide-inst" style="margin-top:.3rem;color:var(--text3)">Artificial Neural Networks &amp; Pattern Recognition</div>
+  </div>
+
+  <!-- Dataset citation -->
+  <div style="margin-top:2rem;max-width:700px;margin-left:auto;margin-right:auto;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:left">
+    <div style="font-family:var(--mono);font-size:0.72rem;color:var(--text3);margin-bottom:0.6rem">// DATASET CITATION</div>
+    <p style="font-size:0.82rem;color:var(--text2);line-height:1.8">
+      Moody GB, Mark RG. <em>The impact of the MIT-BIH Arrhythmia Database.</em>
+      IEEE Engineering in Medicine and Biology Magazine. 20(3):45–50, 2001.<br/>
+      <span style="color:var(--text3)">Available on Kaggle: ECG Heartbeat Categorization Dataset</span>
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════════ -->
+<footer>
+  <span>ECG ANN Classifier</span> — SRM Institute of Science and Technology — 2024<br/>
+  Rohini C · Ram Karthikeyan · Nehali Das · Dharshan S · Guide: Dr. Varshini Karthik
+</footer>
+
+<script src="js/nn-animation.js"></script>
+<script src="js/waveform.js"></script>
+<script src="js/imbalance.js"></script>
+<script src="js/results.js"></script>
+<script src="js/classifier.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

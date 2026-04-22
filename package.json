@@ -1,0 +1,18 @@
+{
+  "name": "ecg-ann-classifier",
+  "version": "1.0.0",
+  "description": "Biomedical ECG Signal Classification using ANN — SRM Institute",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "Rohini C, Ram Karthikeyan, Nehali Das, Dharshan S",
+  "license": "MIT"
+}
