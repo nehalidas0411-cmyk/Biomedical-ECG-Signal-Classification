@@ -131,28 +131,29 @@
     distort this shape in characteristic ways.
   </p>
 
-  <div style="margin-top:2.5rem">
-    <!-- Class tabs -->
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem" id="waveTabs">
-      <button class="wave-tab active" data-class="0" style="--c:#00C896">💚 Normal</button>
-      <button class="wave-tab" data-class="1" style="--c:#FF4B6E">⚡ Supraventricular</button>
-      <button class="wave-tab" data-class="2" style="--c:#FFD93D">⚠️ Ventricular</button>
-      <button class="wave-tab" data-class="3" style="--c:#7c6bff">🔀 Fusion</button>
-      <button class="wave-tab" data-class="4" style="--c:#74B9FF">❓ Unknown</button>
-    </div>
+<div style="margin-top:2.5rem">
+  <!-- Tabs -->
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem" id="waveTabs">
+    <button class="wave-tab active" data-class="0" style="--c:#00C896" onclick="switchClass(0)">💚 Normal</button>
+    <button class="wave-tab" data-class="1" style="--c:#FF4B6E" onclick="switchClass(1)">⚡ Supraventricular</button>
+    <button class="wave-tab" data-class="2" style="--c:#FFD93D" onclick="switchClass(2)">⚠️ Ventricular</button>
+    <button class="wave-tab" data-class="3" style="--c:#7c6bff" onclick="switchClass(3)">🔀 Fusion</button>
+    <button class="wave-tab" data-class="4" style="--c:#74B9FF" onclick="switchClass(4)">❓ Unknown</button>
+  </div>
 
-    <div class="chart-panel" style="padding:1.5rem 1.5rem 2rem">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <h4 id="waveTitle" style="color:var(--green)">Normal Sinus Rhythm</h4>
-        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text3)">187 time steps @ 125 Hz</span>
-      </div>
-      <canvas id="waveCanvas" style="width:100%;height:160px;display:block"></canvas>
-      <div style="display:flex;justify-content:space-between;margin-top:0.8rem;font-size:0.75rem;color:var(--text3);font-family:var(--mono)">
-        <span>t = 0 ms</span>
-        <span id="waveDesc" style="color:var(--text2);text-align:center;max-width:60%">Regular P-QRS-T pattern. Consistent intervals and normal amplitude.</span>
-        <span>t = 1496 ms</span>
-      </div>
+  <!-- Image display -->
+  <div class="chart-panel" style="padding:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h4 id="waveTitle" style="color:#00C896">Normal Sinus Rhythm</h4>
+      <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text3)">187 time steps @ 125 Hz</span>
     </div>
+    <img id="waveImage" src="images/ecg_normal.png"
+         style="width:100%;border-radius:8px;display:block" alt="ECG waveform"/>
+    <p id="waveDesc" style="margin-top:0.8rem;font-size:0.82rem;color:var(--text2);text-align:center">
+      Regular P-QRS-T pattern. Consistent intervals and normal amplitude.
+    </p>
+  </div>
+</div>  
 
     <!-- Waveform comparison strip -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.8rem;margin-top:1rem">
